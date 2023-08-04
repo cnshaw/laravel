@@ -4,10 +4,12 @@ namespace App\Providers;
 
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Schema;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -36,7 +38,18 @@ class EventServiceProvider extends ServiceProvider
                 json_encode($request->input()),
                 json_encode($response->getContent()),
                 date('Y-m-d H:i:s',$_SERVER['REQUEST_TIME'])];
-            DB::insert('insert into request_log (method, path,data,response,time) values (?, ?, ?, ?, ?)', $row);
+            $table_name = 'request_log_'.date('Ymd');
+            if(!Schema::hasTable($table_name)) {
+                Schema::create($table_name, function (Blueprint $table) {
+                    $table->id();
+                    $table->string('method');
+                    $table->string('path');
+                    $table->string('data');
+                    $table->text('response');
+                    $table->timestamps();
+                });
+            }
+            DB::insert('insert into '.$table_name.' (method, path,data,response,created_at) values (?, ?, ?, ?, ?)', $row);
         });
     }
 
