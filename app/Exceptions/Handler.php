@@ -43,7 +43,7 @@ class Handler extends ExceptionHandler
 
         $res = ['status'=>$e->getCode(),'msg'=>$e->getMessage()];
 
-        if('01'){
+        if(env('APP_DEBUG')){
             $res['trace'] = $e->getTrace();
         }else{
             // if code != -1  it is an  unexpected error trigger by wrong code or bad request
