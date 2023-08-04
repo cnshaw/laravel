@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -30,18 +31,28 @@ class Handler extends ExceptionHandler
 
     public function render($request,Throwable $e)
     {
+
+        $row = [
+            $request->method(),
+            $request->path(),
+            json_encode($request->input()),
+            $e->getMessage(),
+            json_encode($e->getTrace()),
+            date('Y-m-d H:i:s',$_SERVER['REQUEST_TIME'])];
+        DB::insert('insert into error_log (method, path,data,msg,trace,time) values (?, ?, ?,?, ?, ?)', $row);
+
         $res = ['status'=>$e->getCode(),'msg'=>$e->getMessage()];
 
-        if('0'){
+        if('01'){
             $res['trace'] = $e->getTrace();
         }else{
-            // if code != -1  it is an  unexpected error trigger by wrong code
+            // if code != -1  it is an  unexpected error trigger by wrong code or bad request
             if($e->getCode()!=-1) {
                 $res['status'] = 500;
                 $res['msg'] = 'Internal Server Error';
             }
-            // request problem
-            if(substr($e->getMessage(),-19) == 'could not be found.'){
+            // check request problem
+            if(str_ends_with($e->getMessage(), 'could not be found.')){
                 $res['status'] = 404;
                 $res['msg'] = "404 'Not Found'";
             }
