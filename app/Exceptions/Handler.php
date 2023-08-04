@@ -27,4 +27,25 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    public function render($request,Throwable $e)
+    {
+        $res = ['status'=>$e->getCode(),'msg'=>$e->getMessage()];
+
+        if('0'){
+            $res['trace'] = $e->getTrace();
+        }else{
+            // if code != -1  it is an  unexpected error trigger by wrong code
+            if($e->getCode()!=-1) {
+                $res['status'] = 500;
+                $res['msg'] = 'Internal Server Error';
+            }
+            // request problem
+            if(substr($e->getMessage(),-19) == 'could not be found.'){
+                $res['status'] = 404;
+                $res['msg'] = "404 'Not Found'";
+            }
+        }
+        return response($res);
+    }
 }
