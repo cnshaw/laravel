@@ -11,7 +11,7 @@
  Target Server Version : 50726 (5.7.26)
  File Encoding         : 65001
 
- Date: 04/08/2023 14:08:44
+ Date: 04/08/2023 14:39:41
 */
 
 SET NAMES utf8mb4;
@@ -26,11 +26,11 @@ CREATE TABLE `request_log`  (
   `method` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   `data` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `response` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+  `response` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL,
   `time` datetime NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `time`(`time`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for error_log
@@ -46,6 +46,6 @@ CREATE TABLE `error_log`  (
   `time` datetime NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `time`(`time`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 27 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
