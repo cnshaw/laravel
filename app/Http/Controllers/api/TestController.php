@@ -54,6 +54,9 @@ class TestController extends BaseController
             $res['msg'] = " s length must >=1 and <=10000 ";
             return json_encode($res);
         }
+        if($length/2==1){
+            return json_encode($res);
+        }
         $close_char = '';
         for($i=0;$i<$length;$i++) {
             $char = $s[$i];
