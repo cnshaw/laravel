@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\ReqLog;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -34,28 +34,7 @@ class Handler extends ExceptionHandler
     public function render($request,Throwable $e)
     {
 
-        $table_name = 'error_log_'.date('Ymd');
-        if(!Schema::hasTable($table_name)) {
-            Schema::create($table_name, function (Blueprint $table) {
-                $table->id();
-                $table->string('method');
-                $table->string('path');
-                $table->string('data');
-                $table->string('msg');
-                $table->text('trace');
-                $table->timestamps();
-            });
-        }
-        $row = [
-            $request->method(),
-            $request->path(),
-            json_encode($request->input()),
-            $e->getMessage(),
-            json_encode($e->getTrace()),
-            date('Y-m-d H:i:s',time()),
-        ];
-        DB::insert('insert into '.$table_name.' (method, path,data,msg,trace,created_at) values (?, ?, ?,?, ?,?)', $row);
-
+        ReqLog::ErrorLog($request,$e);
         $res = ['status'=>$e->getCode(),'msg'=>$e->getMessage()];
 
         if(env('APP_DEBUG')){
