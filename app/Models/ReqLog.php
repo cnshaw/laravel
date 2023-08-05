@@ -4,11 +4,12 @@ namespace App\Models;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;use Throwable;
+use Illuminate\Support\Facades\Schema;
+use Throwable;
 class ReqLog
 {
     /**
-     * save req adn res log to  request_log_XXX
+     * save req adn res log to  request_log_XXX xxx is the day
      */
     public static function RequestHandled(RequestHandled $event) :void
     {
@@ -35,7 +36,7 @@ class ReqLog
     }
 
     /**
-     * save exception log to  error_log_XXX
+     * save exception log to  error_log_XXX xxx is the day
      */
     public static function ErrorLog($request,Throwable $e):void
     {
