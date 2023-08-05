@@ -4,8 +4,7 @@ namespace App\Exceptions;
 
 use App\Models\ReqLog;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -31,7 +30,7 @@ class Handler extends ExceptionHandler
         });
     }
 
-    public function render($request,Throwable $e)
+    public function render($request,Throwable $e):Response
     {
 
         ReqLog::ErrorLog($request,$e);
